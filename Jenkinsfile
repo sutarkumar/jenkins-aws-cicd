@@ -14,9 +14,7 @@ pipeline {
 
         stage('Check Node and npm') {
             steps {
-                sh 'which node'
                 sh 'node --version'
-                sh 'which npm'
                 sh 'npm --version'
             }
         }
@@ -32,15 +30,30 @@ pipeline {
                 sh 'cd app && npm test'
             }
         }
+
+        stage('Deploy to EC2') {
+            steps {
+                sshagent(credentials: ['ec2-deploy-key']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ec2-user@15.252.240.238 '
+                            cd ~/jenkins-aws-cicd &&
+                            git pull origin main &&
+                            cd app &&
+                            npm ci
+                        '
+                    '''
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo 'CI Pipeline completed successfully!'
+            echo 'CI/CD Pipeline completed successfully!'
         }
 
         failure {
-            echo 'CI Pipeline failed!'
+            echo 'CI/CD Pipeline failed!'
         }
     }
 }
