@@ -1,10 +1,23 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin"
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Check Node and npm') {
+            steps {
+                sh 'which node'
+                sh 'node --version'
+                sh 'which npm'
+                sh 'npm --version'
             }
         }
 
