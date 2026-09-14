@@ -33,9 +33,22 @@ pipeline {
             }
         }
 
+        stage('Terraform Plan') {
+            steps {
+                sh '''
+                    cd terraform
+                    terraform init
+                    terraform validate
+                    terraform plan -var="admin_cidr=103.77.186.57/32"
+                '''
+            }
+        }
+
         stage('Deploy to EC2') {
             steps {
+
                 withCredentials([file(credentialsId: 'ec2-deploy-key', variable: 'SSH_KEY')]) {
+
                     sh '''
                         chmod 600 "$SSH_KEY"
 
