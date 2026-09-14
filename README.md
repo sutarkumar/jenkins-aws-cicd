@@ -1,5 +1,11 @@
 # Automated CI/CD Pipeline with Jenkins, AWS, Terraform, and GitHub
 
+## Jenkins CI/CD Pipeline
+
+The Jenkins pipeline automates dependency installation, testing, Terraform validation, and deployment to AWS EC2.
+
+![Jenkins Pipeline](jenkins.png)
+
 ## Project Objective
 The objective of this project is to build an automated, production-style CI/CD (Continuous Integration and Continuous Deployment) pipeline that tests, builds, and deploys a Node.js web application using Jenkins, AWS, Terraform, and GitHub.
 
