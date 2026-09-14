@@ -87,3 +87,4 @@ In subsequent phases, this application will be automated as follows:
 4. **Containerization & Deployment:** Docker images will be built and deployed automatically to AWS infrastructure.
 
 
+Automatic CI/CD test
