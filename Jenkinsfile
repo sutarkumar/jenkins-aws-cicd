@@ -1,4 +1,5 @@
 pipeline {
+
     agent any
 
     environment {
@@ -6,6 +7,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -33,14 +35,19 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(credentials: ['ec2-deploy-key']) {
+                withCredentials([file(credentialsId: 'ec2-deploy-key', variable: 'SSH_KEY')]) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ec2-user@15.252.240.238 '
-                            cd ~/jenkins-aws-cicd &&
-                            git pull origin main &&
-                            cd app &&
-                            npm ci
-                        '
+                        chmod 600 "$SSH_KEY"
+
+                        ssh -i "$SSH_KEY" \
+                            -o StrictHostKeyChecking=no \
+                            ec2-user@15.252.240.238 '
+                                cd ~/jenkins-aws-cicd &&
+                                git pull origin main &&
+                                cd app &&
+                                npm ci &&
+                                pm2 restart jenkins-cicd-app || pm2 start server.js --name jenkins-cicd-app
+                            '
                     '''
                 }
             }
@@ -48,6 +55,7 @@ pipeline {
     }
 
     post {
+
         success {
             echo 'CI/CD Pipeline completed successfully!'
         }
