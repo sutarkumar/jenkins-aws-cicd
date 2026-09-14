@@ -85,3 +85,4 @@ In subsequent phases, this application will be automated as follows:
 2. **Jenkins CI:** Jenkins will run tests (`npm test`) inside an isolated build step.
 3. **Infrastructure Provisioning:** Terraform will provision cloud resources on AWS.
 4. **Containerization & Deployment:** Docker images will be built and deployed automatically to AWS infrastructure.
+
